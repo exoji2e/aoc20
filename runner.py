@@ -162,3 +162,13 @@ def run(YEAR, DAY, p1_fn, p2_fn, cmds, FILE=None):
         print('part_2: {}'.format(res))
         if 'submit2' in cmds:
             submit(YEAR, DAY, 2, res)
+
+def create_day(day):
+    padded = '{:02d}'.format(day)
+    file_path = '{}/day{}.py'.format(padded, padded)
+    mkdirs(padded)
+    with open(file_path, 'w') as t:
+        with open('template.py') as s:
+            t.write(s.read().replace('datetime.date.today().day', str(day)))
+
+    
