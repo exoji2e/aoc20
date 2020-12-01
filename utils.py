@@ -22,3 +22,21 @@ def is_integer(n):
         return True
     except ValueError:
         return False
+
+
+def print_stats(v):
+    lines = get_lines(v)
+    print('INPUT[:10]:')
+    for line in lines[:10]:
+        print('> ' + line)
+    if len(lines) > 10:
+        print('...')
+    tot_tokens = 0
+    int_tokens = 0
+    for line in lines:
+        for tok in line.split():
+            tot_tokens += 1
+            if is_integer(tok):
+                int_tokens += 1
+    print('lines: {}, tokens: {}, int_tokens: {}'.format(
+        len(lines), tot_tokens, int_tokens))

@@ -2,7 +2,7 @@
 import sys, time, datetime
 sys.path.extend(['..', '.'])
 from collections import *
-from main import run
+from runner import run
 from utils import *
 def get_day(): return 1
 def get_year(): return 2020

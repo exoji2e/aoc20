@@ -1,8 +1,12 @@
-import os, glob, time
-import progressbar
+import argparse
+import sys, time, os, glob, time
 from datetime import datetime
-def log(s):
-    print('Fetch: {}'.format(s))
+import logging as log
+import pathlib
+import progressbar
+
+sys.path.extend(['..', '.'])
+from utils import get_lines, is_integer, print_stats
 
 def submit_real(year, day, level, answer): 
     import requests, bs4
@@ -19,7 +23,6 @@ def submit_real(year, day, level, answer):
     }
     r = requests.post(url, data=data, cookies=jar)
     
-    Correct = "That's the correct answer"
     if not r.status_code == 200:
         return 'StatusCode: {}\n{}'.format(r.status_code, r.text)
     
@@ -28,19 +31,18 @@ def submit_real(year, day, level, answer):
     
 
 def submit(year, day, level, answer):
-    print('About to submit: "{}" on {}-{} part {}'.format(answer, year, day, level))
+    print('About to submit: "{}" on part {}, day {} {}'.format(answer, level, day, year))
     print('Confirm submit? y/N')
     ans = input()
     if ans.lower() == 'y':
         print('Submitting {}'.format(answer))
         text = submit_real(year, day, level, answer)
-        if "That's the correct answer" in text:
+        if "That's the right answer" in text:
             print('AC!')
         print('>> ' + text)
         return text
     else:
         print('Skipping submit')
-
 
 
 def dl(fname, day, year):
@@ -51,13 +53,13 @@ def dl(fname, day, year):
     url = 'https://adventofcode.com/{}/day/{}/input'.format(year, day)
     r = requests.get(url, cookies=jar)
     if 'Puzzle inputs' in r.text:
-        log('Session cookie expired?')
+        log.w('Session cookie expired?')
         return r.text
     if "Please don't repeatedly request this endpoint before it unlocks!" in r.text:
-        log('Output not available yet')
+        log.w('Output not available yet')
         return r.text
     if r.status_code != 200:
-        log('Not 200 as status code')
+        log.w('Not 200 as status code')
         return r.text
     with open(fname,'w') as f:
         f.write(r.text)
@@ -105,9 +107,9 @@ def fetch(year, day, log, force=False, wait_until_date=-1):
     return open(filename, 'r').read().strip('\n')
 
 
-def get_samples(year, day):
-    d = 'samples/{}_{}'.format(year,day)
-    mkdirs('samples')
+def get_samples(FILE):
+    parent = get_folder(FILE)
+    d = '{}/samples'.format(parent)
     mkdirs(d)
     samples = []
     for fname in glob.glob('{}/*.in'.format(d)):
@@ -115,3 +117,48 @@ def get_samples(year, day):
         samples.append((fname, inp))
     return samples
 
+def get_target(YEAR, DAY):
+    target = datetime(YEAR, 12, DAY, 6, 0, 0, 100)
+    return target
+
+def writeInputToFolder(FILE, content):    
+    parent = pathlib.Path(FILE).parent.absolute()
+    input_dst = '{}/input.in'.format(parent)
+    with open(input_dst,'w') as f:
+        f.write(content)
+    
+def get_folder(FILE):
+    return pathlib.Path(FILE).parent.absolute()
+
+
+
+
+
+def run(YEAR, DAY, p1_fn, p2_fn, cmds, FILE=None):
+    if 'run_samples' in cmds:
+        for fname, data in get_samples(FILE):
+            print(fname)
+            if 'run1' in cmds:
+                print('p1: ', p1_fn(data))
+            if 'run2' in cmds:
+                print('p2: ', p2_fn(data))
+    target = get_target(YEAR, DAY)
+    fmt_str = '%(asctime)-15s %(filename)8s:%(lineno)-3d %(message)s'
+    log.basicConfig(level=log.DEBUG, format=fmt_str)
+    force = 'force_fetch' in cmds
+    v = fetch(YEAR, DAY, log, wait_until_date=target, force=force)
+    if FILE != None:
+        writeInputToFolder(FILE, v)
+    if 'print_stats' in cmds:
+        print_stats(v)
+    
+    if 'run1' in cmds:
+        res = p1_fn(v)
+        print('part_1: {}'.format(res))
+        if 'submit1' in cmds:
+            submit(YEAR, DAY, 1, res)
+    if 'run2' in cmds:
+        res = p2_fn(v)
+        print('part_2: {}'.format(res))
+        if 'submit2' in cmds:
+            submit(YEAR, DAY, 2, res)

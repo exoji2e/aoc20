@@ -2,7 +2,7 @@
 import sys, time, datetime
 sys.path.extend(['..', '.'])
 from collections import *
-from main import run
+from runner import run
 from utils import *
 def get_day(): return datetime.date.today().day
 def get_year(): return 2020
@@ -22,7 +22,7 @@ if __name__ == '__main__':
         'run2',
         'print_stats',
         'run_samples',
-        # 'submit1',
-        # 'submit2',
+        #'submit1',
+        #'submit2',
     ]
     run(get_year(), get_day(), p1, p2, cmds, FILE=__file__)
