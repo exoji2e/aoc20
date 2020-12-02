@@ -34,8 +34,7 @@ if __name__ == '__main__':
     cmds = [
         'run1',
         'run2',
-        'print_stats',
-        'run_samples',
+        # 'print_stats',
         # 'submit1',
         # 'submit2',
     ]

@@ -31,7 +31,6 @@ if __name__ == '__main__':
         'run1',
         'run2',
         'print_stats',
-        'run_samples',
         'submit1',
         'submit2',
     ]

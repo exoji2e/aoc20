@@ -131,17 +131,16 @@ def get_folder(FILE):
     return pathlib.Path(FILE).parent.absolute()
 
 
-
+def run_samples(p1_fn, p2_fn, cmds, FILE):
+    for fname, data in get_samples(FILE):
+        print(fname)
+        if 'run1' in cmds:
+            print('p1: ', p1_fn(data))
+        if 'run2' in cmds:
+            print('p2: ', p2_fn(data))
 
 
 def run(YEAR, DAY, p1_fn, p2_fn, cmds, FILE=None):
-    if 'run_samples' in cmds:
-        for fname, data in get_samples(FILE):
-            print(fname)
-            if 'run1' in cmds:
-                print('p1: ', p1_fn(data))
-            if 'run2' in cmds:
-                print('p2: ', p2_fn(data))
     target = get_target(YEAR, DAY)
     fmt_str = '%(asctime)-15s %(filename)8s:%(lineno)-3d %(message)s'
     log.basicConfig(level=log.DEBUG, format=fmt_str)
