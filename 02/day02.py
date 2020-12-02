@@ -11,8 +11,7 @@ def p1(v):
     lines = get_lines(v)
     S = 0
     for line in lines:
-        lo, hi, c, ps = multi_split(line, ' :-')
-        lo, hi = map(int, [lo, hi])
+        lo, hi, c, ps = lazy_ints(multi_split(line, ' :-'))
         cnt = ps.count(c)
         if lo <= cnt <= hi:
             S += 1
@@ -22,8 +21,7 @@ def p2(v):
     lines = get_lines(v)
     S = 0
     for line in lines:
-        lo, hi, c, ps = multi_split(line, ' :-')
-        lo, hi = map(int, [lo, hi])
+        lo, hi, c, ps = lazy_ints(multi_split(line, ' :-'))
         ok1 = ps[lo-1] == c
         ok2 = ps[hi-1] == c
         if (ok1 and not ok2) or (not ok1 and ok2):

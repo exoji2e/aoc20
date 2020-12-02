@@ -18,6 +18,15 @@ def multi_split(s, schars):
     if curr: out.append(curr)
     return out
 
+def lazy_ints(arr):
+    out = []
+    for v in arr:
+        if is_integer(v):
+            out.append(int(v))
+        else:
+            out.append(v)
+    return out
+
 # Grids
 def grid_neigh(r, c):
     return [(r-1, c), (r, c-1), (r, c+1), (r+1, c)]
