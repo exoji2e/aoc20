@@ -5,6 +5,19 @@ def get_ints(v):
 def get_lines(data):
     return data.strip('\n').split('\n')
 
+def multi_split(s, schars):
+    out = []
+    curr = ''
+    for c in s:
+        if c in schars:
+            if curr:
+                out.append(curr)
+                curr = ''
+        else:
+            curr += c
+    if curr: out.append(curr)
+    return out
+
 # Grids
 def grid_neigh(r, c):
     return [(r-1, c), (r, c-1), (r, c+1), (r+1, c)]

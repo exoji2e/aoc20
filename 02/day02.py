@@ -11,9 +11,8 @@ def p1(v):
     lines = get_lines(v)
     S = 0
     for line in lines:
-        rule, ps = line.split(':')
-        nos, c = rule.strip().split()
-        lo, hi = map(int, nos.split('-'))
+        lo, hi, c, ps = multi_split(line, ' :-')
+        lo, hi = map(int, [lo, hi])
         cnt = ps.count(c)
         if lo <= cnt <= hi:
             S += 1
@@ -23,10 +22,8 @@ def p2(v):
     lines = get_lines(v)
     S = 0
     for line in lines:
-        rule, ps = line.split(':')
-        ps = ps.strip()
-        nos, c = rule.strip().split()
-        lo, hi = map(int, nos.split('-'))
+        lo, hi, c, ps = multi_split(line, ' :-')
+        lo, hi = map(int, [lo, hi])
         ok1 = ps[lo-1] == c
         ok2 = ps[hi-1] == c
         if (ok1 and not ok2) or (not ok1 and ok2):
