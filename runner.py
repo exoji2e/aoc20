@@ -185,10 +185,15 @@ def run(YEAR, DAY, p1_fn, p2_fn, cmds, FILE=None):
 
 def create_day(day):
     padded = '{:02d}'.format(day)
-    file_path = '{}/day{}.py'.format(padded, padded)
+    file_path = f'{padded}/day{padded}.py'
+    samples = f'{padded}/samples'
     mkdirs(padded)
+    mkdirs(samples)
     with open(file_path, 'w') as t:
         with open('template.py') as s:
             t.write(s.read().replace('datetime.date.today().day', str(day)))
+    sample1 = f'{samples}/1.in'
+    with open(sample1, 'w') as f:
+        f.write('')
 
     
