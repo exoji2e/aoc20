@@ -135,15 +135,22 @@ def get_commands():
     parser = argparse.ArgumentParser()
     parser.add_argument('--rs', action='store_true', help='run_samples')
     parser.add_argument('--so', action='store_true', help='samples_only')
-    parser.add_argument('--sk1', action='store_true', help='skip part 1')
-    parser.add_argument('--sk2', action='store_true', help='skip part 2')
+    parser.add_argument('-1', '--p1', action='store_true', help='only part 1')
+    parser.add_argument('-2', '--p2', action='store_true', help='only part 2')
     parser.add_argument('--s1', action='store_true', help='submit part 1')
     parser.add_argument('--s2', action='store_true', help='submit part 2')
     parser.add_argument('-i', '--info', action='store_true', help='print info')
     args = parser.parse_args()
     cmds = []
-    if not args.sk1: cmds.append('run1')
-    if not args.sk2: cmds.append('run2')
+    if not args.p1 and not args.p2: 
+        cmds.append('run1')
+        cmds.append('run2')
+    else:
+        if args.p1:
+            cmds.append('run1')
+        else:
+            cmds.append('run2')
+            
     if args.s1: cmds.append('submit1')
     if args.s2: cmds.append('submit2')
     if args.info: cmds.append('print_stats')
