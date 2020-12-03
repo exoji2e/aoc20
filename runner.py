@@ -4,12 +4,12 @@ from datetime import datetime
 import logging as log
 import pathlib
 import progressbar
+import requests, bs4
 
 sys.path.extend(['..', '.'])
 from utils import get_lines, is_integer, print_stats
 
 def submit_real(year, day, level, answer): 
-    import requests, bs4
     from secret import session
     jar = requests.cookies.RequestsCookieJar()
     jar.set('session', session)
@@ -46,7 +46,6 @@ def submit(year, day, level, answer):
 
 
 def dl(fname, day, year):
-    import requests
     from secret import session
     jar = requests.cookies.RequestsCookieJar()
     jar.set('session', session)
@@ -114,6 +113,7 @@ def get_samples(FILE):
     samples = []
     for fname in glob.glob('{}/*.in'.format(d)):
         inp = open(fname, 'r').read().strip('\n')
+        if len(inp) < 2: continue
         samples.append((fname, inp))
     return samples
 
@@ -129,6 +129,27 @@ def writeInputToFolder(FILE, content):
     
 def get_folder(FILE):
     return pathlib.Path(FILE).parent.absolute()
+
+
+def get_commands():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--rs', action='store_true', help='run_samples')
+    parser.add_argument('--so', action='store_true', help='samples_only')
+    parser.add_argument('--sk1', action='store_true', help='skip part 1')
+    parser.add_argument('--sk2', action='store_true', help='skip part 2')
+    parser.add_argument('--s1', action='store_true', help='submit part 1')
+    parser.add_argument('--s2', action='store_true', help='submit part 2')
+    parser.add_argument('-i', '--info', action='store_true', help='print info')
+    args = parser.parse_args()
+    cmds = []
+    if not args.sk1: cmds.append('run1')
+    if not args.sk2: cmds.append('run2')
+    if args.s1: cmds.append('submit1')
+    if args.s2: cmds.append('submit2')
+    if args.info: cmds.append('print_stats')
+    if args.rs: cmds.append('run_samples')
+    if args.so: cmds.append('samples_only')
+    return cmds
 
 
 def run_samples(p1_fn, p2_fn, cmds, FILE):
