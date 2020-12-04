@@ -111,10 +111,11 @@ def get_samples(FILE):
     d = '{}/samples'.format(parent)
     mkdirs(d)
     samples = []
-    for fname in glob.glob('{}/*.in'.format(d)):
+    for fname in sorted(glob.glob('{}/*.in'.format(d))):
         inp = open(fname, 'r').read().strip('\n')
         if len(inp) < 2: continue
-        samples.append((fname, inp))
+        name = pathlib.Path(fname).name
+        samples.append((name, inp))
     return samples
 
 def get_target(YEAR, DAY):
