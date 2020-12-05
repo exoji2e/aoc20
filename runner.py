@@ -7,7 +7,7 @@ import progressbar
 import requests, bs4
 
 sys.path.extend(['..', '.'])
-from utils import get_lines, is_integer, print_stats
+from utils import get_lines, print_stats
 
 def submit_real(year, day, level, answer): 
     from secret import session
