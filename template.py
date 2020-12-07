@@ -12,8 +12,7 @@ def p1(v):
     return 0
 
 def p2(v):
-    lines = get_lines(v)
-    return 0
+    return p1(v)
 
 
 if __name__ == '__main__':
