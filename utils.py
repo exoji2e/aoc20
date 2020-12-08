@@ -33,6 +33,46 @@ def lazy_ints(arr):
             out.append(v)
     return out
 
+# VM
+class VM:
+    def __init__(self, reg, prog, instr_fn):
+        self.reg = reg
+        self.prog = prog
+        self.instr_fn = instr_fn
+
+        self.i = 0
+        self.seen = set()
+        self.running = True
+
+    def err(self, tag, *strs):
+        print('[VM: {}]'.format(tag), *strs)
+    
+    def still_running(self):
+        i = self.i
+        if i >= len(self.prog):
+            self.running = False
+        if i < 0:
+            self.err('state', 'i < 0: {}'.format(i))
+            self.running = False
+        return self.running
+
+    def step(self):
+        if not self.running: 
+            self.err('step', 'calling step after termination')
+            return
+        if not self.still_running():
+            return
+        i = self.i
+        instr = self.prog[i]
+        self.i += self.instr_fn(self, instr)
+        self.seen.add(i)
+
+    def exec(self):
+        while self.running:
+            self.step()
+
+
+
 # Grids
 def grid4n(r, c):
     return [(r-1, c), (r, c-1), (r, c+1), (r+1, c)]
