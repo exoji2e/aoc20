@@ -9,6 +9,8 @@ def get_year(): return 2020
 
 def p1(v):
     lines = get_lines(v)
+    chunks = v.split('\n\n')
+
     return 0
 
 def p2(v):
