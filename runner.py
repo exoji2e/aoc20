@@ -1,6 +1,6 @@
 import argparse
 import sys, time, os, glob, time
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 import logging as log
 import pathlib
 import progressbar
@@ -70,7 +70,7 @@ def mkdirs(f):
     except: pass
 
 def wait_until(date_time):
-    now = datetime.now()
+    now = datetime.now().astimezone()
     tE = date_time.timestamp()
     t0 = now.timestamp()
     M = int(tE-t0) + 1
@@ -119,8 +119,8 @@ def get_samples(FILE):
     return samples
 
 def get_target(YEAR, DAY):
-    target = datetime(YEAR, 12, DAY, 6, 0, 0, 100)
-    return target
+    target = datetime(YEAR, 12, DAY, 5, tzinfo=timezone.utc).astimezone()
+    return target + timedelta(milliseconds=200)
 
 def writeInputToFolder(FILE, content):    
     parent = pathlib.Path(FILE).parent.absolute()
