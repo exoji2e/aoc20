@@ -10,7 +10,6 @@ def get_year(): return 2020
 def p1(v):
     lines = get_lines(v)
     S = [0] + lazy_ints(lines)
-    print(S)
     
     S.sort()
 
@@ -21,7 +20,6 @@ def p1(v):
             o += 1
         if S[i] == S[i+1] - 3:
             t += 1
-    print(o, t)
     return o*t
 
 def p2(inp):
